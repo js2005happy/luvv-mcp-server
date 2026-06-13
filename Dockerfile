@@ -67,7 +67,7 @@ COPY --from=builder /build/package.json ./
 
 # 健康检查
 HEALTHCHECK --interval=60s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "require('./dist/index.js')" 2>&1 | grep -q "ready" || exit 0
+  CMD node -e "require('./dist/main.js')" 2>&1 | grep -q "ready" || exit 0
 
 # 默认以 stdio 模式运行（由 docker-compose 或外部管道对接）
-ENTRYPOINT ["node", "dist/index.js"]
+ENTRYPOINT ["node", "dist/main.js"]

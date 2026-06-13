@@ -35,7 +35,7 @@ npm install
 npm run build
 ```
 
-编译产物输出到 `dist/` 目录，入口文件 `dist/index.js`。
+编译产物输出到 `dist/` 目录，入口文件 `dist/main.js`。
 
 ### 3. 安装扫描工具（推荐）
 
@@ -80,7 +80,7 @@ gitleaks version
     "luvv-security-scanner": {
       "command": "node",
       "args": [
-        "/Users/你的用户名/luvv-mcp-server/dist/index.js"
+        "/Users/你的用户名/luvv-mcp-server/dist/main.js"
       ]
     }
   }
@@ -95,7 +95,7 @@ gitleaks version
     "luvv-security-scanner": {
       "command": "node",
       "args": [
-        "/Users/zhangsan/luvv-mcp-server/dist/index.js"
+        "/Users/zhangsan/luvv-mcp-server/dist/main.js"
       ]
     }
   }
@@ -110,7 +110,7 @@ gitleaks version
     "luvv-security-scanner": {
       "command": "node",
       "args": [
-        "C:\\Users\\Administrator\\luvv-mcp-server\\dist\\index.js"
+        "C:\\Users\\Administrator\\luvv-mcp-server\\dist\\main.js"
       ]
     }
   }
@@ -255,14 +255,27 @@ SCAN_TARGET=$(pwd) docker compose run --rm mcp
 ```
 luvv-mcp-server/
 ├── src/
-│   └── index.ts          # 主入口，MCP Server 完整实现
-├── dist/                 # 编译产物（npm run build 后生成）
+│   ├── main.ts               # CLI 入口，按参数路由传输模式
+│   ├── server.ts              # createServer() 工厂函数
+│   ├── tools/
+│   │   ├── index.ts           # registerAllTools() 汇总
+│   │   └── run-security-scan.ts  # 安全扫描工具定义与处理器
+│   ├── transports/
+│   │   └── stdio.ts           # stdio 传输启动器（+ 信号处理）
+│   └── lib/
+│       ├── logger.ts          # 结构化 stderr 日志
+│       ├── executor.ts        # spawn 封装 + 路径校验
+│       └── scanner.ts         # semgrep + gitleaks 编排
+├── tests/
+│   └── run-security-scan.test.ts  # 单元测试
+├── dist/                      # 编译产物（npm run build）
+├── vitest.config.ts
 ├── package.json
 ├── tsconfig.json
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .env.example
-└── README.md             # 本文件
+└── README.md
 ```
 
 ## License
