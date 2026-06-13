@@ -1,0 +1,42 @@
+# ============================================================
+# Luvv MCPServer — Docker Compose 编排
+#
+# 用法：
+#   docker compose build          # 构建镜像
+#   docker compose run --rm mcp   # 交互式运行（stdio 模式）
+#
+# 注意：MCP 协议依赖 stdio，docker compose up 不适合直接使用。
+# 推荐用 docker compose run 或将 stdin/stdout 管道传入。
+# ============================================================
+
+version: "3.9"
+
+services:
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GITLEAKS_VERSION: "8.18.4"
+    image: luvv-mcp-server:latest
+    container_name: luvv-mcp-server
+    stdin_open: true     # 允许 stdio 通信（MCP 协议通道）
+    tty: false
+    environment:
+      - SEMGREP_CONFIG=${SEMGREP_CONFIG:-auto}
+      - SEMGREP_TIMEOUT=${SEMGREP_TIMEOUT:-300}
+      - GITLEAKS_TIMEOUT=${GITLEAKS_TIMEOUT:-120}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - INCLUDE_RAW_OUTPUT=${INCLUDE_RAW_OUTPUT:-false}
+    env_file:
+      - .env  # 可选：本地覆盖
+    volumes:
+      # 挂载待扫描的代码目录（根据实际需要修改）
+      - ${SCAN_TARGET:-./scan_target}:/scan:ro
+    # stdio 模式下不暴露端口，也不使用 ports 映射
+    restart: "no"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

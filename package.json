@@ -1,0 +1,39 @@
+{
+  "name": "luvv-mcp-server",
+  "version": "1.0.0",
+  "description": "生产级安全审计 MCP Server — 封装 semgrep + gitleaks，通过 stdio 协议为 Claude Desktop 提供自动化代码扫描能力",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "luvv-mcp-server": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prestart": "npm run build"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  },
+  "keywords": [
+    "mcp",
+    "security",
+    "audit",
+    "semgrep",
+    "gitleaks",
+    "claude",
+    "sast"
+  ],
+  "license": "MIT",
+  "author": "Luvv"
+}
