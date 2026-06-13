@@ -4,9 +4,6 @@
   "description": "生产级安全审计 MCP Server — 封装 semgrep + gitleaks，通过 stdio 协议为 Claude Desktop 提供自动化代码扫描能力",
   "type": "module",
   "main": "dist/main.js",
-  "bin": {
-    "luvv-mcp-server": "./dist/main.js"
-  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/main.js",
